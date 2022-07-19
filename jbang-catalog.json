@@ -1,0 +1,9 @@
+{
+  "catalogs": {},
+  "aliases": {
+    "hello-optnc": {
+      "script-ref": "https://github.com/optnc/jbang-catalog/blob/main/hello-optnc/HelloOptNc.java"
+    }
+  },
+  "templates": {}
+}
