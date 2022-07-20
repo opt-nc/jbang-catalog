@@ -32,17 +32,24 @@ class validator implements Callable<Integer> {
     public Integer call() throws Exception { // your business logic goes here...
         switch (check){
             case "is-valid":
-                System.out.println(PhoneNumberValidator.isPossible(phoneNumber));
+                System.out.println(PhoneNumberValidator.isPossible(phoneNumber) ? "oui" : "non");
                 break;
             case "is-fixe":
-                System.out.println(PhoneNumberValidator.isFixe(phoneNumber));
+                System.out.println(PhoneNumberValidator.isFixe(phoneNumber) ? "oui" : "non");
                 break;
             case "is-mobile":
-                System.out.println(PhoneNumberValidator.isMobile(phoneNumber));
+                System.out.println(PhoneNumberValidator.isMobile(phoneNumber) ? "oui" : "non");
                 break;
+            case "format":
+                System.out.println(PhoneNumberValidator.format(phoneNumber));
+                break;
+            case "info":
+                System.out.println("Numéro valide : " + (PhoneNumberValidator.isPossible(phoneNumber) ? "oui" : "non"));
+                System.out.println("Type de numéro : " + PhoneNumberValidator.getPhoneType(phoneNumber).name());
+            break;
             default:
                 System.out.println("Invalid option : " + check);
-                System.out.println("Choose in : is-valid, is-fixe, is-mobile");
+                System.out.println("Choose in : is-valid, is-fixe, is-mobile, format, info");
             break;
         }
 
