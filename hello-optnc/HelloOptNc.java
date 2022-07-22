@@ -16,7 +16,7 @@ import java.util.concurrent.Callable;
         description = "HelloOptNc made with jbang")
 class HelloOptNc implements Callable<Integer> {
 
-    @Parameters(index = "0", description = "The greeting to print", defaultValue = "from OPT-NC!")
+    @Parameters(index = "0", description = "The greeting to print", defaultValue = "J'Bang!")
     private String greeting;
 
     public static void main(String... args) {
@@ -26,7 +26,7 @@ class HelloOptNc implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception { // your business logic goes here...
-        printAsciiArt("Hello World " + greeting);
+        printAsciiArt("OPT-NC <3 " + greeting);
         return 0;
     }
 
@@ -37,12 +37,12 @@ class HelloOptNc implements Callable<Integer> {
 
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics g = image.getGraphics();
-        g.setFont(new Font("Serif", Font.BOLD, 12));
+        g.setFont(new Font("Sans Serif", Font.BOLD, 15));
 
         Graphics2D graphics = (Graphics2D) g;
         graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        graphics.drawString(text, 0, 10);
+        graphics.drawString(text, 5, 15);
 
         for (int y = 0; y < height; y++) {
             StringBuilder sb = new StringBuilder();

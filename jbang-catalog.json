@@ -5,7 +5,7 @@
       "script-ref": "https://github.com/opt-nc/jbang-catalog/blob/main/hello-optnc/HelloOptNc.java"
     },
     "phonenumber-validator": {
-      "script-ref": "https://github.com/opt-nc/jbang-catalog/blob/main/phonenumber-validator/validator.java"
+      "script-ref": "https://github.com/opt-nc/jbang-catalog/blob/main/phonenumber-validator/Validator.java"
     }
   },
   "templates": {}

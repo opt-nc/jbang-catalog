@@ -12,9 +12,9 @@ import nc.opt.telecom.sdk.phonenumber.validator.util.PhoneNumberValidator;
 
 import java.util.concurrent.Callable;
 
-@Command(name = "validator", mixinStandardHelpOptions = true, version = "validator 0.1",
-        description = "validator made with jbang")
-class validator implements Callable<Integer> {
+@Command(name = "Validator", mixinStandardHelpOptions = true, version = "Validator 0.1",
+        description = "Validator made with jbang")
+class Validator implements Callable<Integer> {
 
     @CommandLine.Option(
             names = {"-c", "--check"},
@@ -24,7 +24,7 @@ class validator implements Callable<Integer> {
     private String phoneNumber;
 
     public static void main(String... args) {
-        int exitCode = new CommandLine(new validator()).execute(args);
+        int exitCode = new CommandLine(new Validator()).execute(args);
         System.exit(exitCode);
     }
 
