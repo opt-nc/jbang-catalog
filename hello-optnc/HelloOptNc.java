@@ -26,7 +26,7 @@ class HelloOptNc implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception { // your business logic goes here...
-        printAsciiArt("OPT-NC <3 " + greeting);
+        printAsciiArt("Opt-Nc <3 " + greeting);
         return 0;
     }
 
