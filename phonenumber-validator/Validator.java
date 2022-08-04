@@ -75,7 +75,7 @@ class Validator implements Callable<Integer> {
         boolean returnJsonRequired = false;
         if(output != null && output.equals("json"))
             returnJsonRequired = true;
-        else {
+        else if(output != null){
             System.err.println("Format de sortie non supporté : " + output);
             return -1;
         }
