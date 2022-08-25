@@ -1,7 +1,7 @@
 ///usr/bin/env jbang "$0" "$@" ; exit $?
 //REPOS mavencentral,jitpack
 //DEPS info.picocli:picocli:4.5.0
-//DEPS com.github.opt-nc:phonenumber-validator:1.2.2
+//DEPS com.github.opt-nc:phonenumber-validator:1.4.0
 //DEPS com.fasterxml.jackson.core:jackson-databind:2.13.1
 
 
@@ -39,7 +39,7 @@ class Validator implements Callable<Integer> {
     private static class CheckOption {
         @CommandLine.Option(
                 names = {"-c", "--check"},
-                description = "Vérification à exécuter sur le numéro de téléphone (is-mobile, is-fixe, is-valid). Le numéro doit être au format E.164.")
+                description = "Vérification à exécuter sur le numéro de téléphone (is-mobile, is-fixe, is-valid, is-special). Le numéro doit être au format E.164.")
         private String check;
     }
 
@@ -59,7 +59,7 @@ class Validator implements Callable<Integer> {
 
     @CommandLine.Option(
             names = {"-o", "--output"},
-            description = "Retourne la reponse au format demandané")
+            description = "Retourne la réponse au format demandé")
     private String output;
 
 
@@ -100,9 +100,13 @@ class Validator implements Callable<Integer> {
                     numberInfo.isMobile = PhoneNumberValidator.isMobile(phoneNumber);
                     result = returnJsonRequired ? mapper.writeValueAsString(numberInfo) : String.valueOf(numberInfo.isMobile);
                     break;
+                case "is-special":
+                    numberInfo.isMobile = PhoneNumberValidator.isSpecial(phoneNumber);
+                    result = returnJsonRequired ? mapper.writeValueAsString(numberInfo) : String.valueOf(numberInfo.isSpecial);
+                    break;
                 default:
                     System.out.println("Option invalide: " + checkOption.check);
-                    System.out.println("Choisissez parmi : is-valid, is-fixe, is-mobile");
+                    System.out.println("Choisissez parmi : is-valid, is-fixe, is-mobile, is-special");
                     return -1;
             }
         }
@@ -111,9 +115,13 @@ class Validator implements Callable<Integer> {
             result = returnJsonRequired ? mapper.writeValueAsString(numberInfo) : numberInfo.internationalNumber;
         }
         else if (infoOption != null && infoOption.infoRequired){
-            numberInfo.type = PhoneNumberValidator.getPhoneType(phoneNumber).name();
+            numberInfo.type = PhoneNumberValidator.getPhoneType(phoneNumber);
             numberInfo.isValid = PhoneNumberValidator.isPossible(phoneNumber);
-            result = returnJsonRequired ? mapper.writeValueAsString(numberInfo) : ("Numéro valide : " + numberInfo.isValid + "\nType de numéro : " + numberInfo.type);
+            if(PhoneNumberValidator.isSpecial(phoneNumber))
+                numberInfo.attribue = PhoneNumberValidator.getSpecialNumberLabel(phoneNumber);
+
+            result = returnJsonRequired ? mapper.writeValueAsString(numberInfo) : ("Numéro valide : " + numberInfo.isValid
+                    + "\nType de numéro : " + numberInfo.type + (PhoneNumberValidator.isSpecial(phoneNumber) ? "\nAttribué: " + PhoneNumberValidator.getSpecialNumberLabel(phoneNumber) : ""));
         }
 
         System.out.println(result);
@@ -126,8 +134,10 @@ class Validator implements Callable<Integer> {
         Boolean isMobile;
         Boolean isFixe;
         Boolean isValid;
+        Boolean isSpecial;
         String internationalNumber;
         String type;
+        String attribue;
 
         public Boolean isMobile() {
             return isMobile;
@@ -153,6 +163,14 @@ class Validator implements Callable<Integer> {
             isValid = valid;
         }
 
+        public Boolean getIsSpecial() {
+            return isSpecial;
+        }
+
+        public void setSpecial(Boolean special) {
+            isSpecial = special;
+        }
+
         public String getInternationalNumber() {
             return internationalNumber;
         }
@@ -167,6 +185,14 @@ class Validator implements Callable<Integer> {
 
         public void setType(String type) {
             this.type = type;
+        }
+
+        public String getAttribue() {
+            return attribue;
+        }
+
+        public void setAttribue(String attribue) {
+            this.attribue = attribue;
         }
     }
 }
