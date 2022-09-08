@@ -103,7 +103,7 @@ class Validator implements Callable<Integer> {
                         result = returnJsonRequired ? mapper.writeValueAsString(numberInfo) : String.valueOf(numberInfo.isMobile);
                         break;
                     case "is-special":
-                        numberInfo.isMobile = PhoneNumberValidator.isSpecial(phoneNumber);
+                        numberInfo.isSpecial = PhoneNumberValidator.isSpecial(phoneNumber);
                         result = returnJsonRequired ? mapper.writeValueAsString(numberInfo) : String.valueOf(numberInfo.isSpecial);
                         break;
                     default:
