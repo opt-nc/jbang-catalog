@@ -22,7 +22,7 @@ import java.util.concurrent.Callable;
 class Validator implements Callable<Integer> {
 
 
-     @ArgGroup(exclusive = true)
+    @ArgGroup(exclusive = true)
     private FormatOption formatOption;
 
     @ArgGroup(exclusive = true)
@@ -81,47 +81,61 @@ class Validator implements Callable<Integer> {
         }
 
 
-        NumberInfo numberInfo = numberInfo = new NumberInfo();
+        NumberInfo numberInfo = new NumberInfo();
         String result = "";
         ObjectMapper mapper = new ObjectMapper();
         mapper.setSerializationInclusion(Include.NON_NULL);
 
+
         if(checkOption != null) {
-            switch (checkOption.check) {
-                case "is-valid":
-                    numberInfo.isValid = PhoneNumberValidator.isPossible(phoneNumber);
-                    result = returnJsonRequired ? mapper.writeValueAsString(numberInfo) : String.valueOf(numberInfo.isValid);
-                    break;
-                case "is-fixe":
-                    numberInfo.isFixe = PhoneNumberValidator.isFixe(phoneNumber);
-                    result = returnJsonRequired ? mapper.writeValueAsString(numberInfo) : String.valueOf(numberInfo.isFixe);
-                    break;
-                case "is-mobile":
-                    numberInfo.isMobile = PhoneNumberValidator.isMobile(phoneNumber);
-                    result = returnJsonRequired ? mapper.writeValueAsString(numberInfo) : String.valueOf(numberInfo.isMobile);
-                    break;
-                case "is-special":
-                    numberInfo.isMobile = PhoneNumberValidator.isSpecial(phoneNumber);
-                    result = returnJsonRequired ? mapper.writeValueAsString(numberInfo) : String.valueOf(numberInfo.isSpecial);
-                    break;
-                default:
-                    System.out.println("Option invalide: " + checkOption.check);
-                    System.out.println("Choisissez parmi : is-valid, is-fixe, is-mobile, is-special");
-                    return -1;
+            try{
+                switch (checkOption.check) {
+                    case "is-valid":
+                        numberInfo.isValid = PhoneNumberValidator.isPossible(phoneNumber);
+                        result = returnJsonRequired ? mapper.writeValueAsString(numberInfo) : String.valueOf(numberInfo.isValid);
+                        break;
+                    case "is-fixe":
+                        numberInfo.isFixe = PhoneNumberValidator.isFixe(phoneNumber);
+                        result = returnJsonRequired ? mapper.writeValueAsString(numberInfo) : String.valueOf(numberInfo.isFixe);
+                        break;
+                    case "is-mobile":
+                        numberInfo.isMobile = PhoneNumberValidator.isMobile(phoneNumber);
+                        result = returnJsonRequired ? mapper.writeValueAsString(numberInfo) : String.valueOf(numberInfo.isMobile);
+                        break;
+                    case "is-special":
+                        numberInfo.isMobile = PhoneNumberValidator.isSpecial(phoneNumber);
+                        result = returnJsonRequired ? mapper.writeValueAsString(numberInfo) : String.valueOf(numberInfo.isSpecial);
+                        break;
+                    default:
+                        System.out.println("Option invalide: " + checkOption.check);
+                        System.out.println("Choisissez parmi : is-valid, is-fixe, is-mobile, is-special");
+                        return -1;
+                }
+
+            }catch (IllegalArgumentException e){
+                System.err.println(e.getMessage());
             }
         }
         else if (formatOption != null && formatOption.formatRequired){
-            numberInfo.internationalNumber = PhoneNumberValidator.format(phoneNumber);
-            result = returnJsonRequired ? mapper.writeValueAsString(numberInfo) : numberInfo.internationalNumber;
+            try {
+                numberInfo.internationalNumber = PhoneNumberValidator.format(phoneNumber);
+                result = returnJsonRequired ? mapper.writeValueAsString(numberInfo) : numberInfo.internationalNumber;
+            }catch (IllegalArgumentException e){
+                System.err.println(e.getMessage());
+            }
         }
         else if (infoOption != null && infoOption.infoRequired){
-            numberInfo.type = PhoneNumberValidator.getPhoneType(phoneNumber);
-            numberInfo.isValid = PhoneNumberValidator.isPossible(phoneNumber);
-            if(PhoneNumberValidator.isSpecial(phoneNumber))
-                numberInfo.attribue = PhoneNumberValidator.getSpecialNumberLabel(phoneNumber);
+            try{
+                numberInfo.type = PhoneNumberValidator.getPhoneType(phoneNumber);
+                numberInfo.isValid = PhoneNumberValidator.isPossible(phoneNumber);
+                if(PhoneNumberValidator.isSpecial(phoneNumber))
+                    numberInfo.attribue = PhoneNumberValidator.getSpecialNumberLabel(phoneNumber);
 
-            result = returnJsonRequired ? mapper.writeValueAsString(numberInfo) : ("Numéro valide : " + numberInfo.isValid
-                    + "\nType de numéro : " + numberInfo.type + (PhoneNumberValidator.isSpecial(phoneNumber) ? "\nAttribué: " + PhoneNumberValidator.getSpecialNumberLabel(phoneNumber) : ""));
+                result = returnJsonRequired ? mapper.writeValueAsString(numberInfo) : ("Numéro valide : " + numberInfo.isValid
+                        + "\nType de numéro : " + numberInfo.type + (PhoneNumberValidator.isSpecial(phoneNumber) ? "\nAttribué: " + PhoneNumberValidator.getSpecialNumberLabel(phoneNumber) : ""));
+            }catch (IllegalArgumentException e){
+                System.err.println(e.getMessage());
+            }
         }
 
         System.out.println(result);
